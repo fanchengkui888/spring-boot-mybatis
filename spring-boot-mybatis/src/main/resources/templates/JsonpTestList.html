@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<a href="javascript:jsonptest()"><h3>JsonpTest测试</h3></a>
+
+<a href="javascript:jsonpquery()"><h3>JsonpTest查询</h3></a>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModaljsonp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:320px"><!--设置模态窗口宽度-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabelqianke">新增潜客</h4>
+            </div>
+            <div class="modal-body">
+                <form id="addformjsonp" method="post">
+                    <table>
+                        <tr>
+                            <td>账号</td>
+                            <td><input type="text" class="form-control" name="userName" placeholder="请输入名称"/></td>
+                        </tr>
+                        <tr>
+                            <td>密码</td>
+                            <td><input type="text" class="form-control" name="password" placeholder="请输入身份证"/></td>
+                        </tr>
+                        <tr>
+                            <td>年龄</td>
+                            <td><input type="text" class="form-control" name="age" placeholder="请输入现住址"/></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="addJsonp()">新增</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="showcontent"></div>
+<script type="text/javascript">
+
+    function jsonptest(){
+        $.ajax({
+            url: 'http://127.0.0.1:8080/jsonptest',
+            type: 'post',
+            dataType:'jsonp',
+            jsonp: "callback",
+            data: {
+                "type":'0',
+                "mobilePhone": $("#tel").val()
+            },
+            success:function(data){
+                alert(data.ret)
+                settime(obj)
+            },
+            error:function(data){
+                $('#mstr_ck').html("获取验证码失败，请重试！");
+                $("#error_ck").show();
+            }
+        });
+    }
+
+    function jsonpquery(){
+       $.ajax({
+            type : "post",
+            async: false,
+            url : "http://127.0.0.1:8080/jsonpquery",
+            dataType: "jsonp",//返回的类型
+            jsonp:"jsonpCallback", //请求参数名callback,jsonpCallback
+            success : function(data) {
+//                <![CDATA[
+                var str="<table border='1'><tr><td>编号</td><td>账号</td><td>密码</td><td>年龄</td><td>操作</td></tr>";
+                for(var i=0;i<data.length;i++){
+                    var id =data[i].id;
+                    var userName =data[i].userName;
+                    var upassword =data[i].password;
+                    var age =data[i].age;
+                    str+="<tr><td><input type='text' value="+id+"/></td>";
+                    str+="<td><input type='text' value="+userName+"/></td>";
+                    str+="<td><input type='text' value="+upassword+"/></td>";
+                    str+="<td><input type='text' value="+age+"/></td>";
+                    str+="<td><a href='javascript:void(0)' onclick='deleteJsonp("+data[i].id+")' >删除</a>" +
+                            "<a href='javascript:void(0)' onclick='toupdateJsonp("+data[i].id+")' >修改</a></td></tr>";
+                }
+                str+="<tr><td><a href='javascript:void(0)' onclick='toaddJsonp()'>新增</a></td></tr></table>";
+                $("#showcontent").html(str);
+//                ]]>
+            },
+            error:function(){
+                alert('查询失败');
+            }
+        });
+
+    }
+    //删除
+    function deleteJsonp(id){
+        $.ajax({
+            url:"http://127.0.0.1:8080/deleteJsonp",
+            type:"post",
+            data:{"id":id},
+            dataType:"jsonp",
+            jsonp:"deleteJsonp",
+            success:function(data){
+                self.location = document.referrer;//刷新当前页面
+//                location.href = "http://127.0.0.1:8080/jsonpquery";
+            }
+
+        })
+    }
+    //去新增
+    function toaddJsonp(){
+        //打开模态窗口
+        $(function () { $('#myModaljsonp').modal({
+            keyboard: true
+        })});
+    }
+    //新增
+    function addJsonp(){
+        $.ajax({
+            url: 'http://127.0.0.1:8080/addJsonp',
+            type: 'post',
+            dataType:'jsonp',
+            jsonp: "addJsonp",
+            data:$("#addformjsonp").serialize(),
+            success:function(data){
+                alert(data);
+                self.location = document.referrer;//刷新当前页面
+            },
+            error:function(data){
+              alert("新增失败！")
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

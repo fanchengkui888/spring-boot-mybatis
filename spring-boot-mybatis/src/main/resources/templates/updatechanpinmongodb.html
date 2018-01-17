@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<!--<form id="updatechanpin" method="post">-->
+    <!--<div class="modal-body">-->
+        <!--<div class="panel panel-primary">-->
+            <!--<div class="panel-heading">-->
+                <!--<h3 class="panel-title">产品详情</h3>-->
+            <!--</div>-->
+            <!--<div class="panel">-->
+                <!--<h5><font color="aqua">产品基本信息</font></h5>-->
+                <!--<table>-->
+                    <!--<tr>-->
+                        <!--<td>产品名称</td>-->
+                        <!--<td>-->
+                            <!--<input type="text" th:value="${chanPinMongodb.cname}" class="form-control" name="cname" placeholder="请输入产品名称"/>-->
+                        <!--</td>-->
+                        <!--<td>产品类别</td>-->
+                        <!--<td>-->
+                            <!--<div class="form-group">-->
+                                <!--<select class="form-control" name="ctype">-->
+                                    <!--<option value="">&#45;&#45;请选择&#45;&#45;</option>-->
+                                    <!--<option value="1">压车贷</option>-->
+                                    <!--<option value="2">不押车贷</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                        <!--</td>-->
+                        <!--<td>产品状态</td>-->
+                        <!--<td>-->
+                            <!--<div class="form-group">-->
+                                <!--<select class="form-control" name="czhuangtai">-->
+                                    <!--<option value="">&#45;&#45;请选择&#45;&#45;</option>-->
+                                    <!--<option value="1">可选</option>-->
+                                    <!--<option value="2">不可选</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                        <!--</td>-->
+                        <!--<td>产品来源</td>-->
+                        <!--<td><input type="text" class="form-control" name="claiyuan" placeholder="请输入产品来源"/></td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td>开通日期</td>-->
+                        <!--<td><input type="text" class="form-control" value="默认系统时间"/></td>-->
+                        <!--<td></td><td></td><td></td><td></td><td></td><td></td>-->
+                    <!--</tr>-->
+                <!--</table>-->
+            <!--</div>-->
+            <!--<div class="panel" style="">-->
+                <!--<h5><font color="aqua">专区产品基本信息</font></h5>-->
+                <!--<table>-->
+                    <!--<tr>-->
+                        <!--<td>产品利率</td>-->
+                        <!--<td>-->
+                            <!--<input type="text" class="form-control" name="clilv" placeholder="请输入产品利率"/>-->
+                        <!--</td>-->
+                        <!--<td>产品期限</td>-->
+                        <!--<td>-->
+                            <!--<input type="text" class="form-control" name="cqixian" placeholder="请输入产品期限"/>-->
+                        <!--</td>-->
+                        <!--<td>还款方式</td>-->
+                        <!--<td>-->
+                            <!--<div class="form-group">-->
+                                <!--<select class="form-control" name="chuankuanfangshi">-->
+                                    <!--<option value="">&#45;&#45;请选择&#45;&#45;</option>-->
+                                    <!--<option value="1">等本等息</option>-->
+                                    <!--<option value="2">等额本息</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                        <!--</td>-->
+                        <!--<td>额度（元）</td>-->
+                        <!--<td><input type="text" class="form-control" name="cedu" placeholder="请输入额度（元）"/></td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td>合同编号</td>-->
+                        <!--<td><input type="text" class="form-control" placeholder="请输入合同编号"/></td>-->
+                        <!--<td></td><td></td><td></td><td></td><td></td><td></td>-->
+                    <!--</tr>-->
+                <!--</table>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</form>-->
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">产品编辑</h4>
+    </div>
+    <form id="updatechanpin" method="post">
+        <input type="hidden" th:value="${chanPinMongodb.id}"  name="id"/>
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">产品详情</h3>
+                </div>
+                <div class="panel">
+                    <h5><font color="aqua">产品基本信息</font></h5>
+                    <table>
+                        <tr>
+                            <td>产品名称</td>
+                            <td>
+                                <input type="text" th:value="${chanPinMongodb.cname}" class="form-control" name="cname" placeholder="请输入产品名称"/>
+                            </td>
+                            <td>产品类别</td>
+                            <td>
+                                <div class="form-group">
+                                    <select class="form-control" name="ctype">
+                                        <option value="">--请选择--</option>
+                                        <option value="1" th:selected="(${chanPinMongodb.ctype} == 1)">压车贷</option>
+                                        <option value="2" th:selected="(${chanPinMongodb.ctype} == 2)">不押车贷</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>产品状态</td>
+                            <td>
+                                <div class="form-group">
+                                    <select class="form-control" name="czhuangtai">
+                                        <option value="">--请选择--</option>
+                                        <option value="1" th:selected="(${chanPinMongodb.czhuangtai} == 1)">可选</option>
+                                        <option value="2" th:selected="(${chanPinMongodb.czhuangtai} == 2)">不可选</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>产品来源</td>
+                            <td><input type="text" th:value="${chanPinMongodb.claiyuan}" class="form-control" name="claiyuan" placeholder="请输入产品来源"/></td>
+                        </tr>
+                        <tr>
+                            <td>开通日期</td>
+                            <td><input type="text" th:value="${chanPinMongodb.claiyuan}" class="form-control" value="默认系统时间"/></td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="panel" style="">
+                    <h5><font color="aqua">专区产品基本信息</font></h5>
+                    <table>
+                        <tr>
+                            <td>产品利率</td>
+                            <td>
+                                <input type="text" th:value="${chanPinMongodb.clilv}" class="form-control" name="clilv" placeholder="请输入产品利率"/>
+                            </td>
+                            <td>产品期限</td>
+                            <td>
+                                <input type="text" th:value="${chanPinMongodb.cqixian}" class="form-control" name="cqixian" placeholder="请输入产品期限"/>
+                            </td>
+                            <td>还款方式</td>
+                            <td>
+                                <div class="form-group">
+                                    <select class="form-control" name="chuankuanfangshi">
+                                        <option value="">--请选择--</option>
+                                        <option value="1" th:selected="(${chanPinMongodb.chuankuanfangshi} == 1)">等本等息</option>
+                                        <option value="2" th:selected="(${chanPinMongodb.chuankuanfangshi} == 2)">等额本息</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>额度（元）</td>
+                            <td><input type="text" th:value="${chanPinMongodb.cedu}" class="form-control" name="cedu" placeholder="请输入额度（元）"/></td>
+                        </tr>
+                        <tr>
+                            <td>合同编号</td>
+                            <td><input type="text" class="form-control" placeholder="请输入合同编号"/></td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" onclick="updatechanpinmongodb()">修改</button>
+    </div>
+</div>
+</body>
+</html>

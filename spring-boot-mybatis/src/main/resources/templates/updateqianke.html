@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<div class="with:80%">
+    <table class="table table-hover">
+         <tr>
+            <th>渠道</th>
+            <th>业务员</th>
+            <th>公司</th>
+            <th>地址</th>
+        </tr>
+        <tr th:each="qudao : ${qudaoslist}">
+            <td th:text="${qudao.qgongsiname}"></td>
+            <td th:text="${qudao.qname}"></td>
+            <td th:text="${qudao.qgongsidizhi}"></td>
+        </tr>
+     </table>
+</div>
+</body>
+</html>

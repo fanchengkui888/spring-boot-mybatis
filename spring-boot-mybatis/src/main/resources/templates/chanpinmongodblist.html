@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<!--栅格-->
+<div class="row ">
+    <!-- 列 -->
+    <div class="col-lg-2 lie">
+        <button type="button" class="btn btn-success" onclick="tosaveChanPinMongodb()">新增</button>
+    </div>
+</div>
+
+
+<!-- 模态框（Modal）产品新增 -->
+<div class="modal fade" id="myModalchanpin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:1050px"><!--设置模态窗口宽度-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabelqianke">新增潜客</h4>
+            </div>
+            <form id="savechanpin" method="post">
+                <div class="modal-body">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">产品详情</h3>
+                        </div>
+                        <div class="panel">
+                            <h5><font color="aqua">产品基本信息</font></h5>
+                            <table>
+                                <tr>
+                                    <td>产品名称</td>
+                                    <td>
+                                        <input type="text" class="form-control" name="cname" placeholder="请输入产品名称"/>
+                                    </td>
+                                    <td>产品类别</td>
+                                    <td>
+                                        <div class="form-group">
+                                            <select class="form-control" name="ctype">
+                                            <option value="">--请选择--</option>
+                                            <option value="1">压车贷</option>
+                                            <option value="2">不押车贷</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>产品状态</td>
+                                    <td>
+                                        <div class="form-group">
+                                            <select class="form-control" name="czhuangtai">
+                                                <option value="">--请选择--</option>
+                                                <option value="1">可选</option>
+                                                <option value="2">不可选</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>产品来源</td>
+                                    <td><input type="text" class="form-control" name="claiyuan" placeholder="请输入产品来源"/></td>
+                                </tr>
+                                <tr>
+                                    <td>开通日期</td>
+                                    <td><input type="text" class="form-control" value="默认系统时间"/></td>
+                                    <td></td><td></td><td></td><td></td><td></td><td></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="panel" style="">
+                            <h5><font color="aqua">专区产品基本信息</font></h5>
+                            <table>
+                            <tr>
+                                <td>产品利率</td>
+                                <td>
+                                    <input type="text" class="form-control" name="clilv" placeholder="请输入产品利率"/>
+                                </td>
+                                <td>产品期限</td>
+                                <td>
+                                    <input type="text" class="form-control" name="cqixian" placeholder="请输入产品期限"/>
+                                </td>
+                                <td>还款方式</td>
+                                <td>
+                                    <div class="form-group">
+                                        <select class="form-control" name="chuankuanfangshi">
+                                            <option value="">--请选择--</option>
+                                            <option value="1">等本等息</option>
+                                            <option value="2">等额本息</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>额度（元）</td>
+                                <td><input type="text" class="form-control" name="cedu" placeholder="请输入额度（元）"/></td>
+                            </tr>
+                            <tr>
+                                <td>合同编号</td>
+                                <td><input type="text" class="form-control" placeholder="请输入合同编号"/></td>
+                                <td></td><td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="saveChanPinMongodb()">新增</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<table class="table" id="chanpin-table" border="1"></table><!--bootstrapTable表格-->
+
+<script type="text/javascript">
+
+    function search(){
+        $("#chanpin-table").bootstrapTable("refresh",{'pageNumber':1});
+    }
+    $(function(){
+        $("#chanpin-table").bootstrapTable({
+            url:"/queryChanPinMongodb",
+            striped: true,//隔行变色
+            showColumns:true,//是否显示 内容列下拉框
+            showPaginationSwitch:true,//是否显示 数据条数选择框
+            minimumCountColumns:1,//最小留下一个
+            showRefresh:true,//显示刷新按钮
+            showToggle:true,//显示切换视图
+//            search:true,//是否显示搜索框
+//            searchOnEnterKey:true,//设置为 true时，按回车触发搜索方法，否则自动触发搜索方法
+            pagination:true,//开启分页
+            paginationLoop:true,//开启分页无限循环
+            pageNumber:1,//当前页数
+            pageSize:5,//每页条数
+            pageList:[1,5,10,15],//如果设置了分页，设置可供选择的页面数据条数。设置为All 则显示所有记录。
+            sidePagination:"server",//
+            method:'post',//发送请求的方式
+            contentType:"application/x-www-form-urlencoded",//必须的否则条件查询时会乱码
+            queryParams:function(){
+//                var userName= $("#qiankeuserName").val();
+                return { //return 的数据 是传递到  action类中的参数
+//                    "userName":userName,
+                    page:this.pageNumber,//当前页
+                    rows:this.pageSize //每页条数
+                }
+            },
+            columns: [
+                { checkbox:true},
+                {field: 'id',title: '账号', idField:true},
+                {field: 'cname',title: '产品名称', idField:true},
+                {field: 'ctype',title: '产品类别', idField:true},
+                {field: 'chuankuanfangshi',title: '还款方式', idField:true,
+                    formatter:function(value,row,index){
+                        return row.sex == 1 ? "等本等息":"等额本息";
+                    }
+                },
+                {field: 'xueli',title: '学历', idField:true,
+                    formatter:function(value,row,index){
+                        return row.xueli == 1 ? '本科':'大专';
+                    }
+                },
+                {field: 'cedu',title: '额度'},//金融表的字段（使用的是mybatis的流氓属性）
+                {field: 'cdate',title: '时间', idField:true},
+                {field: 'age2',title: '操作',
+                    formatter:function(value,row,index){
+                        console.info(row);
+                        return '<a href="javascript:deletechanpinmongodb('+row.id+')">删除</a>'+
+                                '<a href="javascript:toupdatechanpinmongodb('+row.id+')">修改</a>';
+                    }
+                }
+            ]
+        })
+    })
+    //删除
+    function deletechanpinmongodb(id){
+    $.ajax({
+        url:"/deletechanpinmongodb",
+        type:"post",
+        data:{"id":id},
+        success:function(){
+//            $("#myModalqianke").modal("hide")//关闭模态窗口
+            $("#chanpin-table").bootstrapTable('refresh');//刷新bootstrapTable表格
+        }
+    })
+}
+    //去新增页面（模态窗口）
+    function tosaveChanPinMongodb(){
+        //打开模态窗口
+        $(function () { $('#myModalchanpin').modal({
+            keyboard: true
+        })});
+    }
+    //新增
+    function saveChanPinMongodb(){
+        alert($("#savechanpin").serialize());
+        $.ajax({
+            type:"post",
+            url:"/saveChanPinMongodb",
+            data:$("#savechanpin").serialize(),
+            success:function(){
+                $("#myModalchanpin").modal("hide")//关闭模态窗口
+                $("#chanpin-table").bootstrapTable('refresh');//刷新bootstrapTable表格
+            }
+        })
+    }
+    //修改前去查询
+    function toupdatechanpinmongodb(id){
+        $.ajax({
+            type:"post",
+            url:"/toupdatechanpinmongodb?id="+id,
+            success:function(msg){
+                //添加选项卡
+                $.addtabs.add({
+                    id:"编辑用户",
+                    title:"编辑用户",
+                    content:msg,
+                });
+            }
+        })
+//        window.location.href="/toupdatechanpinmongodb?id="+id;
+    }
+
+    //修改
+    function updatechanpinmongodb(){
+        $.ajax({
+            url:"/updatechanpin",
+            type:"post",
+            data:$("#updatechanpin").serialize(),
+            success:function(){
+                window.location.href="/";
+//            $("#myModalqianke").modal("hide")//关闭模态窗口
+//                $("#chanpin-table").bootstrapTable('refresh');//刷新bootstrapTable表格
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

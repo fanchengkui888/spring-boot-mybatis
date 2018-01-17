@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<!--栅格-->
+<div class="row ">
+    <!-- 列 -->
+    <div class="col-lg-2 lie">
+        <button type="button" class="btn btn-success" onclick="toaddqianke()">新增</button>
+    </div>
+    <div class="col-lg-5 lie">
+        <form class="form-inline" role="form">
+            <input type="text" class="form-control" id="qiankeuserName" placeholder="请输入名称"/>
+            <button type="button" class="btn btn-primary" onclick="search()">搜索</button>
+        </form>
+    </div>
+    <div class="col-lg-5 lie">
+        <form class="form-inline" role="form">
+            <input type="text" class="form-control" id="qiankeuserName2" placeholder="请输入编号"/>
+            <button type="button" class="btn btn-primary" onclick="search()">搜索</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModalqianke" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:320px"><!--设置模态窗口宽度-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabelqianke">新增潜客</h4>
+            </div>
+            <div class="modal-body">
+                <form id="addformqianke2" method="post">
+                    <table>
+                        <tr>
+                            <td>姓名</td>
+                            <td><input type="text" class="form-control" name="name" placeholder="请输入名称"/></td>
+                        </tr>
+                        <tr>
+                            <td>身份证</td>
+                            <td><input type="text" class="form-control" name="shenfenzheng" placeholder="请输入身份证"/></td>
+                        </tr>
+                         <tr>
+                            <td>学历</td>
+                             <td>
+                                 <div class="form-group">
+                                     <select class="form-control" name="xueli">
+                                         <option value="">--请选择--</option>
+                                         <option value="1">本科</option>
+                                         <option value="2">大专</option>
+                                     </select>
+                                 </div>
+                             </td>
+                        </tr>
+                        <tr>
+                            <td>性别</td>
+                            <td>
+                                <input type="radio" name="sex" value="1"/>男
+                                <input type="radio" name="sex" value="2"/>女
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>婚姻</td>
+                            <td>
+                                <input type="radio" name="hunyin" value="1"/>已婚
+                                <input type="radio" name="hunyin" value="2"/>未婚
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>现住址</td>
+                            <td><input type="text" class="form-control" name="xianzhuzhi" placeholder="请输入现住址"/></td>
+                        </tr>
+                        <tr>
+                            <td>户口所在地</td>
+                            <td><input type="text" class="form-control" name="hukousuozi" placeholder="请输入户口所在地"/></td>
+                        </tr>
+                        <tr>
+                            <td>手机号</td>
+                            <td><input type="text" class="form-control" name="shoujihao" placeholder="请输入手机号"/></td>
+                        </tr>
+                        <tr>
+                            <td>金融产品</td>
+                            <td>
+                                <input type="radio" name="jid" value="1"/>车主贷
+                                <input type="radio" name="jid" value="2"/>车主贷2
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="addqianke()">新增</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<table class="table" id="qianke-table" border="1"></table><!--bootstrapTable表格-->
+
+<script type="text/javascript">
+
+    function search(){
+        $("#qianke-table").bootstrapTable("refresh",{'pageNumber':1});
+    }
+    $(function(){
+        $("#qianke-table").bootstrapTable({
+            url:"/queryUser",
+            striped: true,//隔行变色
+            showColumns:true,//是否显示 内容列下拉框
+            showPaginationSwitch:true,//是否显示 数据条数选择框
+            minimumCountColumns:1,//最小留下一个
+            showRefresh:true,//显示刷新按钮
+            showToggle:true,//显示切换视图
+//            search:true,//是否显示搜索框
+//            searchOnEnterKey:true,//设置为 true时，按回车触发搜索方法，否则自动触发搜索方法
+            pagination:true,//开启分页
+            paginationLoop:true,//开启分页无限循环
+            pageNumber:1,//当前页数
+            pageSize:5,//每页条数
+            pageList:[1,5,10,15],//如果设置了分页，设置可供选择的页面数据条数。设置为All 则显示所有记录。
+            sidePagination:"server",//
+            method:'post',//发送请求的方式
+            contentType:"application/x-www-form-urlencoded",//必须的否则条件查询时会乱码
+            queryParams:function(){
+//                var userName= $("#qiankeuserName").val();
+                return { //return 的数据 是传递到  action类中的参数
+//                    "userName":userName,
+                    page:this.pageNumber,//当前页
+                    rows:this.pageSize //每页条数
+                }
+            },
+            columns: [
+                { checkbox:true},
+                {field: 'id',title: '账号', idField:true},
+                {field: 'name',title: '用户名', idField:true},
+                {field: 'shenfenzheng',title: '身份证', idField:true},
+                {field: 'sex',title: '性别', idField:true,
+                    formatter:function(value,row,index){
+                        return row.sex == 1 ? "男":"女";
+                    }
+                },
+                {field: 'xueli',title: '学历', idField:true,
+                    formatter:function(value,row,index){
+                        return row.xueli == 1 ? '本科':'大专';
+                    }
+                },
+                {field: 'jinrongjname',title: '金融产品'},//金融表的字段（使用的是mybatis的流氓属性）
+                {field: 'userdate',title: '时间', idField:true},
+                {field: 'age2',title: '操作',
+                    formatter:function(value,row,index){
+                        console.info(row);
+                        return '<a href="javascript:toupdateqianke('+row.id+','+row.jid+','+row.did+')">编辑</a>';
+                    }
+                }
+            ]
+        })
+    })
+
+    //去新增页面（模态窗口）
+    function toaddqianke(){
+        //打开模态窗口
+        $(function () { $('#myModalqianke').modal({
+            keyboard: true
+        })});
+    }
+    //新增
+    function addqianke(){
+        $.ajax({
+            url:"/addqianke",
+            type:"post",
+            data:$("#addformqianke2").serialize(),
+            success: function () {
+                $("#myModalqianke").modal("hide")//关闭模态窗口
+                $("#qianke-table").bootstrapTable('refresh');//刷新bootstrapTable表格
+            },
+            error:function(){
+                alert("新增失败");
+            }
+        })
+    }
+    //跳到，去修改//去查询，准备修改(打开选项卡，并且发起查询请求)
+    function toupdateqianke(id,jid,did){
+
+        alert(did);
+        $.ajax({
+            type:"post",
+            url:"/toupdateqianke",
+            data:{"id":id,"jid":jid,"did":did},
+            success:function(msg){
+                //添加选项卡
+                $.addtabs.add({
+                    id:"编辑潜客",
+                    title:"编辑潜客",
+                    content:msg,
+                });
+            }
+        })
+    }
+
+</script>
+</body>
+</html>
